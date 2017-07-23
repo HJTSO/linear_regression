@@ -5,19 +5,19 @@
 # 
 # ## 1.1 创建一个 4*4 的单位矩阵
 
-# In[45]:
+# In[1]:
 
 
 # 这个项目设计来帮你熟悉 python range 和线性代数
 # 你不能调用任何python库，包括NumPy，来完成作业
 
 A = [[1,2,3], 
-     [2,3,3], 
-     [1,2,5]]
+     [4,5,6], 
+     [7,8,9]]
 
-B = [[1,2,3,5], 
-     [2,3,3,5], 
-     [1,2,5,1]]
+B = [[11,21,32,43], 
+     [32,76,27,45], 
+     [23,65,95,10]]
 
 #TODO 创建一个 4*4 单位矩阵
 I =  [ [ 0 for i in range(4)] for j in range(4) ]
@@ -29,7 +29,7 @@ for i in range(4):
 
 # ## 1.2 返回矩阵的行数和列数
 
-# In[46]:
+# In[2]:
 
 
 # TODO 返回矩阵的行数和列数
@@ -41,7 +41,7 @@ def shape(M):
 
 # ## 1.3 每个元素四舍五入到特定小数数位
 
-# In[47]:
+# In[3]:
 
 
 # TODO 每个元素四舍五入到特定小数数位
@@ -54,7 +54,7 @@ def matxRound(M, decPts=4):
 
 # ## 1.4 计算矩阵的转置
 
-# In[48]:
+# In[4]:
 
 
 # TODO 计算矩阵的转置
@@ -75,18 +75,18 @@ def transpose(M):
 
 # ## 1.5 计算矩阵乘法 AB
 
-# In[49]:
+# In[5]:
 
 
 # TODO 计算矩阵乘法 AB，如果无法相乘则返回None
 def matxMultiply(A, B):
-    W =  [ [ 0 for i in range(shape(B)[1]) ] for j in range(shape(A)[0]) ]
+    W =  [ [ 0 for i in range(shape(B)[1]) ] for j in range(shape(A)[0])]
     if shape(A)[1]==shape(B)[0]:
         k=shape(A)[1]
-        for ai in range(shape(A)[0]):
+        for mark in range(shape(A)[0]):
             for bj in range(shape(B)[1]):
                 for kk in range(k):
-                    W[ai][bj]+=A[ai][kk]*B[kk][bj]
+                    W[mark][bj]+=A[mark][kk]*B[kk][bj]
         return W
     else:
         return None
@@ -98,28 +98,28 @@ print matxMultiply(A,B)
 
 # **提示：** 你可以用`from pprint import pprint`来更漂亮的打印数据，详见[用法示例](http://cn-static.udacity.com/mlnd/images/pprint.png)和[文档说明](https://docs.python.org/2/library/pprint.html#pprint.pprint)。
 
-# In[50]:
+# In[6]:
 
 
 import pprint
-pp=pprint.PrettyPrinter(indent=1,width=30)
+pp=pprint.PrettyPrinter(indent=1,width=40)
 #TODO 测试1.2 返回矩阵的行和列
-M=[[1,2,3],[1,2,3],[1,2,3],[1,2,3]]
+M=[[1,1,1],[2,2,2],[3,3,3],[4,4,4]]
 pp.pprint(shape(M))
 #TODO 测试1.3 每个元素四舍五入到特定小数数位
-M=[[1.123456,2.123456],[3.123456,4.123456],[5.123456,6.123456]]
+M=[[6.123456,5.123456],[4.123456,3.123456],[2.123456,1.123456]]
 matxRound(M,2)
 pp.pprint(M)
 #TODO 测试1.4 计算矩阵的转置
-M=[[1,2,3,4],[7,8,9,0]]
+M=[[1,4,3,2],[4,6,9,3]]
 pp.pprint(transpose(M))
 #TODO 测试1.5 计算矩阵乘法AB，AB无法相乘
 A=[[1,2,3],[1,2,3],[1,2,3],[1,2,3],[1,2,3]]
 B=[[1,2,3,4],[1,2,3,4]]
 pp.pprint(matxMultiply(A,B))
 #TODO 测试1.5 计算矩阵乘法AB，AB可以相乘
-A=[[1,2],[1,2],[1,2],[1,2],[1,3]]
-B=[[1,2,3,4],[1,2,3,4]]
+A=[[1,2],[3,4],[5,6],[7,8],[9,2]]
+B=[[1,2,3,4],[4,5,6,7]]
 pp.pprint(matxMultiply(A,B))
 
 
@@ -148,7 +148,7 @@ pp.pprint(matxMultiply(A,B))
 #     ...    & ... & ... & ...& ...\\
 #     a_{n1}    & a_{n2} & ... & a_{nn} & b_{n} \end{bmatrix}$
 
-# In[51]:
+# In[7]:
 
 
 # TODO 构造增广矩阵，假设A，b行数相同
@@ -166,7 +166,7 @@ pp.pprint(augmentMatrix(A,b))
 # - 把某行乘以一个非零常数
 # - 把某行加上另一行的若干倍：
 
-# In[52]:
+# In[8]:
 
 
 # TODO r1 <---> r2
@@ -218,7 +218,7 @@ def addScaledRow(M, r1, r2, scale):
 # ### 注：
 # 我们并没有按照常规方法先把矩阵转化为行阶梯形矩阵，再转换为化简行阶梯形矩阵，而是一步到位。如果你熟悉常规方法的话，可以思考一下两者的等价性。
 
-# In[53]:
+# In[9]:
 
 
 # TODO 实现 Gaussain Jordan 方法求解 Ax = b
@@ -291,16 +291,16 @@ def gj_Solve(A, b, decPts=4, epsilon = 1.0e-16):
 
 # ## 2.5 测试 gj_Solve() 实现是否正确
 
-# In[54]:
+# In[10]:
 
 
 # TODO 构造 矩阵A，列向量b，其中 A 为奇异矩阵
-A=[[3,6],[0,0]]
-b=[[0],[3]]
+A=[[8,7],[0,0]]
+b=[[0],[2]]
 pp.pprint(gj_Solve(A,b,2))
 # TODO 构造 矩阵A，列向量b，其中 A 为非奇异矩阵
-A=[[3,6],[2,1]]
-b=[[0],[3]]
+A=[[8,7],[8,1]]
+b=[[0],[2]]
 # TODO 求解 x 使得 Ax = b
 pp.pprint(gj_Solve(A,b,2))
 # TODO 计算 Ax
@@ -462,7 +462,7 @@ b=[[0],[3]]
 # 
 # ### 求解方程 $X^TXh = X^TY $, 计算线性回归的最佳参数 h
 
-# In[55]:
+# In[11]:
 
 
 # TODO 实现线性回归
@@ -472,28 +472,18 @@ b=[[0],[3]]
 '''
 def linearRegression(points):
     n=len(points)
-    #求x均值,#y均值
-    total_x=0
-    total_y=0
-    for i in range(0,n):
-        total_x+=points[i][0]
-        total_y+=points[i][1]
-    mean_x=total_x*1.0/n
-    mean_y=total_y*1.0/n
-        
-    #分子
-    numerator=0
-    #分母
-    denominator=0
-    for i in range(0,n):
-        numerator+=(points[i][0]-mean_x)*(points[i][1]-mean_y)
-        denominator+=(points[i][0]-mean_x)**2
-    return numerator/float(denominator),mean_y/float(mean_x)
+    x=[[points[i][0],1] for i in range(n)]
+    x_t=transpose(x)
+    y=[[points[i][1]] for i in range(n)]
+    x_t_change_x=matxMultiply(x_t,x)
+    x_t_change_y=matxMultiply(x_t,y)
+    #print 'x_t_x=',x_t_change_x
+    return gj_Solve(x_t_change_x,x_t_change_y)
 
 
 # ## 3.3 测试你的线性回归实现
 
-# In[56]:
+# In[12]:
 
 
 # TODO 构造线性函数
@@ -514,7 +504,7 @@ print linearRegression(P)
 
 # 请确保你的实现通过了以下所有单元测试。
 
-# In[57]:
+# In[13]:
 
 
 import unittest
