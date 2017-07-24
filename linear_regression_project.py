@@ -7,7 +7,6 @@
 
 # In[1]:
 
-
 # 这个项目设计来帮你熟悉 python range 和线性代数
 # 你不能调用任何python库，包括NumPy，来完成作业
 
@@ -31,7 +30,6 @@ for i in range(4):
 
 # In[2]:
 
-
 # TODO 返回矩阵的行数和列数
 def shape(M):
     row = len(M)
@@ -42,7 +40,6 @@ def shape(M):
 # ## 1.3 每个元素四舍五入到特定小数数位
 
 # In[3]:
-
 
 # TODO 每个元素四舍五入到特定小数数位
 # 直接修改参数矩阵，无返回值
@@ -56,14 +53,13 @@ def matxRound(M, decPts=4):
 
 # In[4]:
 
-
 # TODO 计算矩阵的转置
 def transpose(M):
-# 使用zip函数
+# 方法1.使用zip函数
 #   W = zip(M) 
-# 使用numpy库
+# 方法2.使用numpy库
 #   W=M.T 
-# 参考
+# 方法3.参考
 #   W=[[M[i][j] for i in range(shape(M)[0])] for j in range(shape(M)[1])]
 
     W =  [ [ 0 for i in range(shape(M)[0]) ] for j in range(shape(M)[1]) ]
@@ -77,20 +73,20 @@ def transpose(M):
 
 # In[5]:
 
-
 # TODO 计算矩阵乘法 AB，如果无法相乘则返回None
 def matxMultiply(A, B):
     W =  [ [ 0 for i in range(shape(B)[1]) ] for j in range(shape(A)[0])]
     if shape(A)[1]==shape(B)[0]:
         k=shape(A)[1]
-        for mark in range(shape(A)[0]):
+        for ai in range(shape(A)[0]):
             for bj in range(shape(B)[1]):
                 for kk in range(k):
-                    W[mark][bj]+=A[mark][kk]*B[kk][bj]
+                    W[ai][bj]+=A[ai][kk]*B[kk][bj]
         return W
     else:
         return None
-    
+
+print "A矩阵与B矩阵相乘为:" 
 print matxMultiply(A,B)
 
 
@@ -99,7 +95,6 @@ print matxMultiply(A,B)
 # **提示：** 你可以用`from pprint import pprint`来更漂亮的打印数据，详见[用法示例](http://cn-static.udacity.com/mlnd/images/pprint.png)和[文档说明](https://docs.python.org/2/library/pprint.html#pprint.pprint)。
 
 # In[6]:
-
 
 import pprint
 pp=pprint.PrettyPrinter(indent=1,width=40)
@@ -150,14 +145,13 @@ pp.pprint(matxMultiply(A,B))
 
 # In[7]:
 
-
 # TODO 构造增广矩阵，假设A，b行数相同
 def augmentMatrix(A, b):
     for i in range(shape(A)[0]):
         A[i].append(b[i][0])
     return A
-A=[[1,2,3,4],[5,6,7,8]]
-b=[[9],[0]]
+A=[[1,2,3],[4,5,6]]
+b=[[7],[8]]
 pp.pprint(augmentMatrix(A,b))
 
 
@@ -167,7 +161,6 @@ pp.pprint(augmentMatrix(A,b))
 # - 把某行加上另一行的若干倍：
 
 # In[8]:
-
 
 # TODO r1 <---> r2
 # 直接修改参数矩阵，无返回值
@@ -220,7 +213,6 @@ def addScaledRow(M, r1, r2, scale):
 
 # In[9]:
 
-
 # TODO 实现 Gaussain Jordan 方法求解 Ax = b
 
 """ Gaussian Jordan 方法求解 Ax = b.
@@ -237,18 +229,20 @@ def addScaledRow(M, r1, r2, scale):
 
 def gj_Solve(A, b, decPts=4, epsilon = 1.0e-16):
     if shape(A)[0]==len(b):
-        
+
 #       转为增广矩阵
         augmentMatrix(A,b)
-    
+
 #       针对每列做操作
         for j in range(shape(A)[1]-1):
             i=j
-            while i+1<shape(A)[0]:
-                if A[j][j]<A[i+1][j]:
-                    swapRows(A, j, i+1)
-                i+=1
-                
+            
+            # 在这一步不应该交换行，交换行是需要消耗时间的，这种实现会非常慢
+#            while i+1<shape(A)[0]:
+#                if A[j][j]<A[i+1][j]:
+#                    swapRows(A, j, i+1)
+#                i+=1
+
 #           如果为奇异矩阵返回none
             if abs(A[j][j])<epsilon:
                 return None
@@ -285,31 +279,48 @@ def gj_Solve(A, b, decPts=4, epsilon = 1.0e-16):
 # 
 # **因为I为单位矩阵,Z为全0矩阵,且A为方阵,由于Y的第一列全0代表矩阵A的对角线含有0,**
 # 
-# **所以结果转换为上三角形矩阵的行列式的值为0,**
+# **所以此矩阵转换为上三角形矩阵的行列式的值为0：**
+# 
+# $ A = \begin{bmatrix}
+#     1&0&0    & X&X&X \\
+#     0&1&0    & X&X&X \\
+#     0&0&1    & X&X&X \\   
+#     0&0&0    & 0&X&X \\
+#     0&0&0    & 0&X&X \\
+#     0&0&0    & 0&X&X \\  
+# \end{bmatrix} 
+# $
 # 
 # **当一个矩阵所在的行列式的值为0的话,该矩阵为奇异矩阵。**
+# **因此A为奇异矩阵。**
 
 # ## 2.5 测试 gj_Solve() 实现是否正确
 
 # In[10]:
 
-
 # TODO 构造 矩阵A，列向量b，其中 A 为奇异矩阵
-A=[[8,7],[0,0]]
-b=[[0],[2]]
+A=[[3,6],[0,0]]
+b=[[0],[3]]
+print "此Ax = b的解为:"
 pp.pprint(gj_Solve(A,b,2))
+
 # TODO 构造 矩阵A，列向量b，其中 A 为非奇异矩阵
-A=[[8,7],[8,1]]
-b=[[0],[2]]
+A=[[3,6],[2,1]]
+b=[[0],[3]]
 # TODO 求解 x 使得 Ax = b
+print "此Ax = b的解为:"
 pp.pprint(gj_Solve(A,b,2))
+
 # TODO 计算 Ax
 A1=3*2-6
 A2=2*2-1
 Ax=[[0],[3]]
+
 # TODO 比较 Ax 与 b
-Ax=[[0],[3]]
-b=[[0],[3]]
+print "其中，Ax的值为:"
+print Ax
+print "其中，b的值为:"
+print b
 
 
 # # 3 线性回归: 
@@ -464,7 +475,6 @@ b=[[0],[3]]
 
 # In[11]:
 
-
 # TODO 实现线性回归
 '''
 参数：(x,y) 二元组列表
@@ -485,7 +495,6 @@ def linearRegression(points):
 
 # In[12]:
 
-
 # TODO 构造线性函数
 
 # TODO 构造 100 个线性函数上的点，加上适当的高斯噪音
@@ -505,7 +514,6 @@ print linearRegression(P)
 # 请确保你的实现通过了以下所有单元测试。
 
 # In[13]:
-
 
 import unittest
 import numpy as np
@@ -635,7 +643,6 @@ class LinearRegressionTestCase(unittest.TestCase):
             r = np.random.randint(low=3,high=10)
             A = np.random.randint(low=-10,high=10,size=(r,r))
             b = np.arange(r).reshape((r,1))
-
             x = gj_Solve(A.tolist(),b.tolist())
             if np.linalg.matrix_rank(A) < r:
                 self.assertEqual(x,None)
@@ -653,7 +660,6 @@ unittest.TextTestRunner(verbosity=3).run(suite)
 
 
 # In[ ]:
-
 
 
 
