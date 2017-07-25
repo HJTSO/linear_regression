@@ -11764,12 +11764,12 @@ div#notebook {
 <span class="c1"># 你不能调用任何python库，包括NumPy，来完成作业</span>
 
 <span class="n">A</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> 
-     <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">],</span> 
-     <span class="p">[</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">]]</span>
+     <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> 
+     <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">]]</span>
 
-<span class="n">B</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">11</span><span class="p">,</span><span class="mi">21</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="mi">43</span><span class="p">],</span> 
-     <span class="p">[</span><span class="mi">32</span><span class="p">,</span><span class="mi">76</span><span class="p">,</span><span class="mi">27</span><span class="p">,</span><span class="mi">45</span><span class="p">],</span> 
-     <span class="p">[</span><span class="mi">23</span><span class="p">,</span><span class="mi">65</span><span class="p">,</span><span class="mi">95</span><span class="p">,</span><span class="mi">10</span><span class="p">]]</span>
+<span class="n">B</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> 
+     <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> 
+     <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">]]</span>
 
 <span class="c1">#TODO 创建一个 4*4 单位矩阵</span>
 <span class="n">I</span> <span class="o">=</span>  <span class="p">[</span> <span class="p">[</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="p">]</span>
@@ -11854,23 +11854,217 @@ div#notebook {
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO 计算矩阵的转置</span>
 <span class="k">def</span> <span class="nf">transpose</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
 <span class="c1"># 方法1.使用zip函数</span>
-<span class="c1">#   W = zip(M) </span>
+<span class="c1"># 先用zip函数得到“行列互换”的效果，</span>
+<span class="c1"># 再通过map函数对每个元素应用list()函数，将里面的tuple转换为list</span>
+
+<span class="c1"># Python 内置的高阶函数map(func, seq1[, seq2,…])</span>
+<span class="c1"># map()函数将func作用于seq中的每一个元素，</span>
+<span class="c1"># 并将所有的调用的结果作为一个list返回。</span>
+<span class="c1"># 此例map()接收一个函数list（）和一个 list，</span>
+<span class="c1"># 过把list（）依次作用在list的每个元素上，得到一个新的list并返回。</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">M</span><span class="p">))</span>
+    
+<span class="c1"># 或者用列表推导式如下表达:</span>
+<span class="c1"># 通过列表推导式（list comprehensions），对每个元素应用list()函数，将里面的tuple转换为list</span>
+<span class="c1">#    return [list(col) for col in zip(*M)]</span>
+    
 <span class="c1"># 方法2.使用numpy库</span>
 <span class="c1">#   W=M.T </span>
-<span class="c1"># 方法3.参考</span>
-<span class="c1">#   W=[[M[i][j] for i in range(shape(M)[0])] for j in range(shape(M)[1])]</span>
 
-    <span class="n">W</span> <span class="o">=</span>  <span class="p">[</span> <span class="p">[</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">shape</span><span class="p">(</span><span class="n">M</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">shape</span><span class="p">(</span><span class="n">M</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span> <span class="p">]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">shape</span><span class="p">(</span><span class="n">M</span><span class="p">)[</span><span class="mi">0</span><span class="p">]):</span>
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">shape</span><span class="p">(</span><span class="n">M</span><span class="p">)[</span><span class="mi">1</span><span class="p">]):</span>
-            <span class="n">W</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+<span class="c1"># 方法3.参考</span>
+<span class="c1"># 多次调用shape函数，导致效率不高</span>
+<span class="c1">#    W =  [ [ 0 for i in range(shape(M)[0]) ] for j in range(shape(M)[1]) ]</span>
+<span class="c1">#    for i in range(shape(M)[0]):</span>
+<span class="c1">#        for j in range(shape(M)[1]):</span>
+<span class="c1">#            W[j][i]=M[i][j]</span>
     <span class="k">return</span> <span class="n">W</span>
+
+<span class="k">print</span> <span class="n">transpose</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
 </pre></div>
 
 </div>
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[[1, 2, 1], [2, 3, 2], [3, 3, 5]]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="zip()&#20989;&#25968;&#30340;&#29702;&#35299;">zip()&#20989;&#25968;&#30340;&#29702;&#35299;<a class="anchor-link" href="#zip()&#20989;&#25968;&#30340;&#29702;&#35299;">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">ziptest</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
+<span class="c1">#zip函数接受任意多个（包括0个和1个）序列作为参数，返回的是一个tuple（元组），然后返回由这些tuples组成的list（列表）</span>
+    <span class="k">return</span> <span class="nb">zip</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="n">ziptest</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[([1, 2, 3],), ([2, 3, 3],), ([1, 2, 5],)]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">transpose</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
+<span class="c1"># *M表示将M列表中的元素来zip，当M列表中存的是列表元素时，就是将列表元素来zip</span>
+<span class="c1"># zip(*M)这里相当于zip([1,2,3],[4,5,6],[7,8,9])</span>
+    <span class="k">return</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">M</span><span class="p">)</span>
+    
+<span class="k">print</span> <span class="n">transpose</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[(1, 2, 1), (2, 3, 2), (3, 3, 5)]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="&#27604;&#36739;&#23454;&#29616;&#20043;&#38388;&#30340;&#24615;&#33021;&#24046;&#36317;">&#27604;&#36739;&#23454;&#29616;&#20043;&#38388;&#30340;&#24615;&#33021;&#24046;&#36317;<a class="anchor-link" href="#&#27604;&#36739;&#23454;&#29616;&#20043;&#38388;&#30340;&#24615;&#33021;&#24046;&#36317;">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">profile</span>
+
+<span class="c1"># def transpose_student_1(M):</span>
+<span class="c1">#     # 多次调用shape函数，导致效率不高</span>
+<span class="c1">#     W =  [ [ 0 for i in range(shape(M)[0]) ] for j in range(shape(M)[1]) ]</span>
+<span class="c1">#     for i in range(shape(M)[0]):</span>
+<span class="c1">#         for j in range(shape(M)[1]):</span>
+<span class="c1">#             W[j][i]=M[i][j]</span>
+
+<span class="k">def</span> <span class="nf">transpose_student_2</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">M</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">transpose_pythonic</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">M</span><span class="p">)]</span>
+
+<span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">times</span><span class="o">=</span><span class="mi">10000</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">times</span><span class="p">):</span>
+        <span class="n">r</span><span class="p">,</span><span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">c</span><span class="p">))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+        <span class="n">transpose_student_2</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>        
+        <span class="n">transpose_pythonic</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="c1"># 你可以修改测试的次数以获得更明显的耗时对比</span>
+    <span class="n">profile</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;test(times=10000)&quot;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>         80005 function calls in 0.432 seconds
+
+   Ordered by: standard name
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+    10000    0.040    0.000    0.040    0.000 :0(map)
+    20000    0.096    0.000    0.096    0.000 :0(randint)
+        1    0.000    0.000    0.000    0.000 :0(range)
+        1    0.000    0.000    0.000    0.000 :0(setprofile)
+    10000    0.045    0.000    0.045    0.000 :0(tolist)
+    20000    0.061    0.000    0.061    0.000 :0(zip)
+    10000    0.028    0.000    0.100    0.000 &lt;ipython-input-7-63880ca7cc14&gt;:11(transpose_student_2)
+    10000    0.062    0.000    0.092    0.000 &lt;ipython-input-7-63880ca7cc14&gt;:14(transpose_pythonic)
+        1    0.099    0.099    0.432    0.432 &lt;ipython-input-7-63880ca7cc14&gt;:17(test)
+        1    0.000    0.000    0.432    0.432 &lt;string&gt;:1(&lt;module&gt;)
+        0    0.000             0.000          profile:0(profiler)
+        1    0.000    0.000    0.432    0.432 profile:0(test(times=10000))
+
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>对比；</p>
+<p>transpose_student_2耗时</p>
+<p>transpose_pythonic耗时</p>
+<p>最后一行：总耗时</p>
+
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -11883,21 +12077,35 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO 计算矩阵乘法 AB，如果无法相乘则返回None</span>
-<span class="k">def</span> <span class="nf">matxMultiply</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
-    <span class="n">W</span> <span class="o">=</span>  <span class="p">[</span> <span class="p">[</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">shape</span><span class="p">(</span><span class="n">B</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span> <span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">shape</span><span class="p">(</span><span class="n">A</span><span class="p">)[</span><span class="mi">0</span><span class="p">])]</span>
-    <span class="k">if</span> <span class="n">shape</span><span class="p">(</span><span class="n">A</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="n">shape</span><span class="p">(</span><span class="n">B</span><span class="p">)[</span><span class="mi">0</span><span class="p">]:</span>
-        <span class="n">k</span><span class="o">=</span><span class="n">shape</span><span class="p">(</span><span class="n">A</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="k">for</span> <span class="n">ai</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">shape</span><span class="p">(</span><span class="n">A</span><span class="p">)[</span><span class="mi">0</span><span class="p">]):</span>
-            <span class="k">for</span> <span class="n">bj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">shape</span><span class="p">(</span><span class="n">B</span><span class="p">)[</span><span class="mi">1</span><span class="p">]):</span>
-                <span class="k">for</span> <span class="n">kk</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
-                    <span class="n">W</span><span class="p">[</span><span class="n">ai</span><span class="p">][</span><span class="n">bj</span><span class="p">]</span><span class="o">+=</span><span class="n">A</span><span class="p">[</span><span class="n">ai</span><span class="p">][</span><span class="n">kk</span><span class="p">]</span><span class="o">*</span><span class="n">B</span><span class="p">[</span><span class="n">kk</span><span class="p">][</span><span class="n">bj</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">W</span>
-    <span class="k">else</span><span class="p">:</span>
+<span class="c1"># def matxMultiply(A, B):</span>
+<span class="c1">#     W =  [ [ 0 for i in range(shape(B)[1]) ] for j in range(shape(A)[0])]</span>
+<span class="c1">#     if shape(A)[1]==shape(B)[0]:</span>
+<span class="c1">#         k=shape(A)[1]</span>
+<span class="c1">#         for ai in range(shape(A)[0]):</span>
+<span class="c1">#             for bj in range(shape(B)[1]):</span>
+<span class="c1">#                 for kk in range(k):</span>
+<span class="c1">#                     W[ai][bj]+=A[ai][kk]*B[kk][bj]</span>
+<span class="c1">#         return W</span>
+<span class="c1">#     else:</span>
+<span class="c1">#         return None</span>
+
+<span class="c1">#循环写太深会造成代码的可读性变差，你可以考虑利用sum函数取代最内层的循环。</span>
+<span class="c1">#https://python3-cookbook.readthedocs.io/zh_CN/latest/c01/p19_transform_and_reduce_data_same_time.html</span>
+<span class="c1">#可能会在改写的过程中发现难以（优雅地）获得矩阵B的列，这里的小诀窍是先将矩阵B转置。</span>
+<span class="c1">#如果还想进一步压缩代码量，可以将剩下的两层循环用列表推导式替代。</span>
+<span class="c1">#推荐</span>
+<span class="k">def</span> <span class="nf">matxMultiply</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">):</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">shape</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="n">r</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">shape</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">c</span> <span class="o">!=</span> <span class="n">r</span> <span class="p">:</span>
         <span class="k">return</span> <span class="bp">None</span>
+    <span class="n">Bt</span> <span class="o">=</span> <span class="n">transpose</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">sum</span><span class="p">((</span><span class="n">a</span><span class="o">*</span><span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">row</span><span class="p">,</span><span class="n">col</span><span class="p">))</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">Bt</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">A</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">result</span>
 
 <span class="k">print</span> <span class="s2">&quot;A矩阵与B矩阵相乘为:&quot;</span> 
 <span class="k">print</span> <span class="n">matxMultiply</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">)</span>
@@ -11914,7 +12122,7 @@ div#notebook {
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>A矩阵与B矩阵相乘为:
-[[144, 368, 371, 163], [342, 854, 833, 457], [540, 1340, 1295, 751]]
+[[8, 14, 24, 18], [11, 19, 30, 28], [10, 18, 34, 20]]
 </pre>
 </div>
 </div>
@@ -11944,28 +12152,39 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">pprint</span>
 <span class="n">pp</span><span class="o">=</span><span class="n">pprint</span><span class="o">.</span><span class="n">PrettyPrinter</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+
+<span class="c1">#assert断言用法： 如果代码是正确的，那么就不会产生任何结果；反之，Python会抛出断言错误</span>
+
 <span class="c1">#TODO 测试1.2 返回矩阵的行和列</span>
 <span class="n">M</span><span class="o">=</span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">]]</span>
+<span class="k">assert</span> <span class="n">shape</span><span class="p">(</span><span class="n">M</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 <span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">shape</span><span class="p">(</span><span class="n">M</span><span class="p">))</span>
+
 <span class="c1">#TODO 测试1.3 每个元素四舍五入到特定小数数位</span>
 <span class="n">M</span><span class="o">=</span><span class="p">[[</span><span class="mf">6.123456</span><span class="p">,</span><span class="mf">5.123456</span><span class="p">],[</span><span class="mf">4.123456</span><span class="p">,</span><span class="mf">3.123456</span><span class="p">],[</span><span class="mf">2.123456</span><span class="p">,</span><span class="mf">1.123456</span><span class="p">]]</span>
 <span class="n">matxRound</span><span class="p">(</span><span class="n">M</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">M</span> <span class="o">==</span> <span class="p">[[</span><span class="mf">6.12</span><span class="p">,</span> <span class="mf">5.12</span><span class="p">],[</span><span class="mf">4.12</span><span class="p">,</span> <span class="mf">3.12</span><span class="p">],[</span><span class="mf">2.12</span><span class="p">,</span> <span class="mf">1.12</span><span class="p">]]</span>
 <span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+
 <span class="c1">#TODO 测试1.4 计算矩阵的转置</span>
 <span class="n">M</span><span class="o">=</span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">3</span><span class="p">]]</span>
+<span class="k">assert</span> <span class="n">transpose</span><span class="p">(</span><span class="n">M</span><span class="p">)</span> <span class="o">==</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]</span>
 <span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">transpose</span><span class="p">(</span><span class="n">M</span><span class="p">))</span>
-<span class="c1">#TODO 测试1.5 计算矩阵乘法AB，AB无法相乘</span>
-<span class="n">A</span><span class="o">=</span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]]</span>
-<span class="n">B</span><span class="o">=</span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]]</span>
-<span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">matxMultiply</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">))</span>
+
 <span class="c1">#TODO 测试1.5 计算矩阵乘法AB，AB可以相乘</span>
 <span class="n">A</span><span class="o">=</span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">],[</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">],[</span><span class="mi">9</span><span class="p">,</span><span class="mi">2</span><span class="p">]]</span>
 <span class="n">B</span><span class="o">=</span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">]]</span>
+<span class="k">assert</span> <span class="n">matxMultiply</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">)</span><span class="o">==</span><span class="p">[[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">18</span><span class="p">],</span> <span class="p">[</span><span class="mi">19</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="mi">40</span><span class="p">],[</span><span class="mi">29</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span> <span class="mi">62</span><span class="p">],[</span><span class="mi">39</span><span class="p">,</span> <span class="mi">54</span><span class="p">,</span> <span class="mi">69</span><span class="p">,</span> <span class="mi">84</span><span class="p">],[</span><span class="mi">17</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">50</span><span class="p">]]</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">matxMultiply</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">))</span>
+
+<span class="c1">#TODO 测试1.5 计算矩阵乘法AB，AB无法相乘</span>
+<span class="n">A</span><span class="o">=</span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]]</span>
+<span class="n">B</span><span class="o">=</span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]]</span>
 <span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">matxMultiply</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">))</span>
 </pre></div>
 
@@ -11983,13 +12202,13 @@ div#notebook {
 [[6.12, 5.12],
  [4.12, 3.12],
  [2.12, 1.12]]
-[[1, 4], [4, 6], [3, 9], [2, 3]]
-None
+[(1, 4), (4, 6), (3, 9), (2, 3)]
 [[9, 12, 15, 18],
  [19, 26, 33, 40],
  [29, 40, 51, 62],
  [39, 54, 69, 84],
  [17, 28, 39, 50]]
+None
 </pre>
 </div>
 </div>
@@ -12028,16 +12247,29 @@ None
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO 构造增广矩阵，假设A，b行数相同</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">copy</span>
+
+<span class="c1"># TODO 构造增广矩阵，假设A，b行数相同</span>
+<span class="c1"># def augmentMatrix(A, b):</span>
+<span class="c1">#     for i in range(shape(A)[0]):</span>
+<span class="c1">#         A[i].append(b[i][0])</span>
+<span class="c1">#     return A</span>
+
 <span class="k">def</span> <span class="nf">augmentMatrix</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">shape</span><span class="p">(</span><span class="n">A</span><span class="p">)[</span><span class="mi">0</span><span class="p">]):</span>
-        <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">return</span> <span class="n">A</span>
-<span class="n">A</span><span class="o">=</span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]]</span>
-<span class="n">b</span><span class="o">=</span><span class="p">[[</span><span class="mi">7</span><span class="p">],[</span><span class="mi">8</span><span class="p">]]</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">shape</span><span class="p">(</span><span class="n">B</span><span class="p">)[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">B</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">B</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> 
+     <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> 
+     <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">]]</span>
+
+<span class="n">b</span><span class="o">=</span><span class="p">[[</span><span class="mi">7</span><span class="p">],[</span><span class="mi">8</span><span class="p">],[</span><span class="mi">9</span><span class="p">]]</span>
+
 <span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">augmentMatrix</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="p">))</span>
 </pre></div>
 
@@ -12051,7 +12283,9 @@ None
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[[1, 2, 3, 7], [4, 5, 6, 8]]
+<pre>[[1, 2, 3, 7],
+ [2, 3, 3, 8],
+ [1, 2, 5, 9]]
 </pre>
 </div>
 </div>
@@ -12076,7 +12310,7 @@ None
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO r1 &lt;---&gt; r2</span>
@@ -12145,7 +12379,7 @@ None
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO 实现 Gaussain Jordan 方法求解 Ax = b</span>
@@ -12166,7 +12400,7 @@ None
     <span class="k">if</span> <span class="n">shape</span><span class="p">(</span><span class="n">A</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
 
 <span class="c1">#       转为增广矩阵</span>
-        <span class="n">augmentMatrix</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">augmentMatrix</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
 
 <span class="c1">#       针对每列做操作</span>
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">shape</span><span class="p">(</span><span class="n">A</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
@@ -12225,8 +12459,8 @@ None
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>TODO 请使用 latex （请参照题目的 latex 写法学习）</p>
 <p>TODO 证明：</p>
-<p><strong>因为I为单位矩阵,Z为全0矩阵,且A为方阵,由于Y的第一列全0代表矩阵A的对角线含有0,</strong></p>
-<p><strong>所以此矩阵转换为上三角形矩阵的行列式的值为0：</strong></p>
+<p><strong>奇异矩阵在线性代数的概念： 对应的行列式等于0的方阵。</strong></p>
+<p><strong>在此例中，因为I为单位矩阵,Z为全0矩阵,且A为方阵,由于Y的第一列全0代表矩阵A的对角线含有0,</strong></p>
 <p>$ A = \begin{bmatrix}
     1&0&0    & X&X&X \\
     0&1&0    & X&X&X \\
@@ -12236,6 +12470,7 @@ None
     0&0&0    & 0&X&X \\  
 \end{bmatrix} 
 $</p>
+<p><strong>所以此矩阵转换为上三角形矩阵的行列式的值为0，即|A|=0,</strong></p>
 <p><strong>当一个矩阵所在的行列式的值为0的话,该矩阵为奇异矩阵。</strong>
 <strong>因此A为奇异矩阵。</strong></p>
 
@@ -12253,7 +12488,7 @@ $</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO 构造 矩阵A，列向量b，其中 A 为奇异矩阵</span>
@@ -12473,7 +12708,7 @@ $$
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO 实现线性回归</span>
@@ -12508,7 +12743,7 @@ $$
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO 构造线性函数</span>
@@ -12519,7 +12754,8 @@ $$
 <span class="n">P</span> <span class="o">=</span>  <span class="p">[</span> <span class="p">[</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span> <span class="p">]</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
     <span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
-    <span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">gauss</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.25</span><span class="p">)</span>
+    <span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">gauss</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1">#高斯噪音指的是服从标准正态分布的随机数，要求均值为0方差为1</span>
     
 <span class="c1">#TODO 对这100个点进行线性回归，将线性回归得到的函数和原线性函数比较</span>
 <span class="k">print</span> <span class="n">linearRegression</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
@@ -12535,7 +12771,7 @@ $$
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[[1.9995], [10.0136]]
+<pre>[[2.0017], [9.6774]]
 </pre>
 </div>
 </div>
@@ -12565,7 +12801,7 @@ $$
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">unittest</span>
@@ -12733,14 +12969,14 @@ test_swapRows (__main__.LinearRegressionTestCase) ... ok
 test_transpose (__main__.LinearRegressionTestCase) ... ok
 
 ----------------------------------------------------------------------
-Ran 9 tests in 0.187s
+Ran 9 tests in 0.201s
 
 OK
 </pre>
 </div>
 </div>
 
-<div class="output_area"><div class="prompt output_prompt">Out[13]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[16]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -12749,19 +12985,6 @@ OK
 
 </div>
 
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span> 
-</pre></div>
-
-</div>
 </div>
 </div>
 

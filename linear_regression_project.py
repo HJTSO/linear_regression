@@ -11,12 +11,12 @@
 # 你不能调用任何python库，包括NumPy，来完成作业
 
 A = [[1,2,3], 
-     [4,5,6], 
-     [7,8,9]]
+     [2,3,3], 
+     [1,2,5]]
 
-B = [[11,21,32,43], 
-     [32,76,27,45], 
-     [23,65,95,10]]
+B = [[1,2,3,5], 
+     [2,3,3,5], 
+     [1,2,5,1]]
 
 #TODO 创建一个 4*4 单位矩阵
 I =  [ [ 0 for i in range(4)] for j in range(4) ]
@@ -56,35 +56,126 @@ def matxRound(M, decPts=4):
 # TODO 计算矩阵的转置
 def transpose(M):
 # 方法1.使用zip函数
-#   W = zip(M) 
+# 先用zip函数得到“行列互换”的效果，
+# 再通过map函数对每个元素应用list()函数，将里面的tuple转换为list
+
+# Python 内置的高阶函数map(func, seq1[, seq2,…])
+# map()函数将func作用于seq中的每一个元素，
+# 并将所有的调用的结果作为一个list返回。
+# 此例map()接收一个函数list（）和一个 list，
+# 过把list（）依次作用在list的每个元素上，得到一个新的list并返回。
+    W = map(list,zip(*M))
+    
+# 或者用列表推导式如下表达:
+# 通过列表推导式（list comprehensions），对每个元素应用list()函数，将里面的tuple转换为list
+#    return [list(col) for col in zip(*M)]
+    
 # 方法2.使用numpy库
 #   W=M.T 
-# 方法3.参考
-#   W=[[M[i][j] for i in range(shape(M)[0])] for j in range(shape(M)[1])]
 
-    W =  [ [ 0 for i in range(shape(M)[0]) ] for j in range(shape(M)[1]) ]
-    for i in range(shape(M)[0]):
-        for j in range(shape(M)[1]):
-            W[j][i]=M[i][j]
+# 方法3.参考
+# 多次调用shape函数，导致效率不高
+#    W =  [ [ 0 for i in range(shape(M)[0]) ] for j in range(shape(M)[1]) ]
+#    for i in range(shape(M)[0]):
+#        for j in range(shape(M)[1]):
+#            W[j][i]=M[i][j]
     return W
 
+print transpose(A)
 
-# ## 1.5 计算矩阵乘法 AB
+
+# ### zip()函数的理解
 
 # In[5]:
 
+def ziptest(M):
+#zip函数接受任意多个（包括0个和1个）序列作为参数，返回的是一个tuple（元组），然后返回由这些tuples组成的list（列表）
+    return zip(M)
+
+print ziptest(A)
+
+
+# In[6]:
+
+def transpose(M):
+# *M表示将M列表中的元素来zip，当M列表中存的是列表元素时，就是将列表元素来zip
+# zip(*M)这里相当于zip([1,2,3],[4,5,6],[7,8,9])
+    return zip(*M)
+    
+print transpose(A)
+
+
+# ### 比较实现之间的性能差距
+
+# In[7]:
+
+import numpy as np
+import profile
+
+# def transpose_student_1(M):
+#     # 多次调用shape函数，导致效率不高
+#     W =  [ [ 0 for i in range(shape(M)[0]) ] for j in range(shape(M)[1]) ]
+#     for i in range(shape(M)[0]):
+#         for j in range(shape(M)[1]):
+#             W[j][i]=M[i][j]
+
+def transpose_student_2(M):
+    W = map(list,zip(*M))
+
+def transpose_pythonic(M):
+    return [list(col) for col in zip(*M)]
+
+def test(times=10000):
+    for t in range(times):
+        r,c = np.random.randint(5,25,2)
+        matrix = np.random.randint(-10,11,size=(r,c)).tolist()
+
+        transpose_student_2(matrix)        
+        transpose_pythonic(matrix)
+
+if __name__ == '__main__':
+    # 你可以修改测试的次数以获得更明显的耗时对比
+    profile.run("test(times=10000)")
+
+
+# 对比；
+# 
+#  transpose_student_2耗时
+#  
+#  transpose_pythonic耗时
+#  
+#  最后一行：总耗时
+
+# ## 1.5 计算矩阵乘法 AB
+
+# In[8]:
+
 # TODO 计算矩阵乘法 AB，如果无法相乘则返回None
-def matxMultiply(A, B):
-    W =  [ [ 0 for i in range(shape(B)[1]) ] for j in range(shape(A)[0])]
-    if shape(A)[1]==shape(B)[0]:
-        k=shape(A)[1]
-        for ai in range(shape(A)[0]):
-            for bj in range(shape(B)[1]):
-                for kk in range(k):
-                    W[ai][bj]+=A[ai][kk]*B[kk][bj]
-        return W
-    else:
+# def matxMultiply(A, B):
+#     W =  [ [ 0 for i in range(shape(B)[1]) ] for j in range(shape(A)[0])]
+#     if shape(A)[1]==shape(B)[0]:
+#         k=shape(A)[1]
+#         for ai in range(shape(A)[0]):
+#             for bj in range(shape(B)[1]):
+#                 for kk in range(k):
+#                     W[ai][bj]+=A[ai][kk]*B[kk][bj]
+#         return W
+#     else:
+#         return None
+
+#循环写太深会造成代码的可读性变差，你可以考虑利用sum函数取代最内层的循环。
+#https://python3-cookbook.readthedocs.io/zh_CN/latest/c01/p19_transform_and_reduce_data_same_time.html
+#可能会在改写的过程中发现难以（优雅地）获得矩阵B的列，这里的小诀窍是先将矩阵B转置。
+#如果还想进一步压缩代码量，可以将剩下的两层循环用列表推导式替代。
+#推荐
+def matxMultiply(A,B):
+    _, c = shape(A)
+    r, _ = shape(B)
+    if c != r :
         return None
+    Bt = transpose(B)
+    result = [[sum((a*b) for a,b in zip(row,col)) for col in Bt] for row in A]
+    return result
 
 print "A矩阵与B矩阵相乘为:" 
 print matxMultiply(A,B)
@@ -94,27 +185,38 @@ print matxMultiply(A,B)
 
 # **提示：** 你可以用`from pprint import pprint`来更漂亮的打印数据，详见[用法示例](http://cn-static.udacity.com/mlnd/images/pprint.png)和[文档说明](https://docs.python.org/2/library/pprint.html#pprint.pprint)。
 
-# In[6]:
+# In[9]:
 
 import pprint
 pp=pprint.PrettyPrinter(indent=1,width=40)
+
+#assert断言用法： 如果代码是正确的，那么就不会产生任何结果；反之，Python会抛出断言错误
+
 #TODO 测试1.2 返回矩阵的行和列
 M=[[1,1,1],[2,2,2],[3,3,3],[4,4,4]]
+assert shape(M) == (4, 3)
 pp.pprint(shape(M))
+
 #TODO 测试1.3 每个元素四舍五入到特定小数数位
 M=[[6.123456,5.123456],[4.123456,3.123456],[2.123456,1.123456]]
 matxRound(M,2)
+assert M == [[6.12, 5.12],[4.12, 3.12],[2.12, 1.12]]
 pp.pprint(M)
+
 #TODO 测试1.4 计算矩阵的转置
 M=[[1,4,3,2],[4,6,9,3]]
+assert transpose(M) == [(1, 4), (4, 6), (3, 9), (2, 3)]
 pp.pprint(transpose(M))
-#TODO 测试1.5 计算矩阵乘法AB，AB无法相乘
-A=[[1,2,3],[1,2,3],[1,2,3],[1,2,3],[1,2,3]]
-B=[[1,2,3,4],[1,2,3,4]]
-pp.pprint(matxMultiply(A,B))
+
 #TODO 测试1.5 计算矩阵乘法AB，AB可以相乘
 A=[[1,2],[3,4],[5,6],[7,8],[9,2]]
 B=[[1,2,3,4],[4,5,6,7]]
+assert matxMultiply(A,B)==[[9, 12, 15, 18], [19, 26, 33, 40],[29, 40, 51, 62],[39, 54, 69, 84],[17, 28, 39, 50]]
+pp.pprint(matxMultiply(A,B))
+
+#TODO 测试1.5 计算矩阵乘法AB，AB无法相乘
+A=[[1,2,3],[1,2,3],[1,2,3],[1,2,3],[1,2,3]]
+B=[[1,2,3,4],[1,2,3,4]]
 pp.pprint(matxMultiply(A,B))
 
 
@@ -143,15 +245,28 @@ pp.pprint(matxMultiply(A,B))
 #     ...    & ... & ... & ...& ...\\
 #     a_{n1}    & a_{n2} & ... & a_{nn} & b_{n} \end{bmatrix}$
 
-# In[7]:
+# In[10]:
+
+import copy
 
 # TODO 构造增广矩阵，假设A，b行数相同
+# def augmentMatrix(A, b):
+#     for i in range(shape(A)[0]):
+#         A[i].append(b[i][0])
+#     return A
+
 def augmentMatrix(A, b):
-    for i in range(shape(A)[0]):
-        A[i].append(b[i][0])
-    return A
-A=[[1,2,3],[4,5,6]]
-b=[[7],[8]]
+    B = copy.deepcopy(A)
+    for i in range(shape(B)[0]):
+        B[i].append(b[i][0])
+    return B
+
+A = [[1,2,3], 
+     [2,3,3], 
+     [1,2,5]]
+
+b=[[7],[8],[9]]
+
 pp.pprint(augmentMatrix(A,b))
 
 
@@ -160,7 +275,7 @@ pp.pprint(augmentMatrix(A,b))
 # - 把某行乘以一个非零常数
 # - 把某行加上另一行的若干倍：
 
-# In[8]:
+# In[11]:
 
 # TODO r1 <---> r2
 # 直接修改参数矩阵，无返回值
@@ -211,7 +326,7 @@ def addScaledRow(M, r1, r2, scale):
 # ### 注：
 # 我们并没有按照常规方法先把矩阵转化为行阶梯形矩阵，再转换为化简行阶梯形矩阵，而是一步到位。如果你熟悉常规方法的话，可以思考一下两者的等价性。
 
-# In[9]:
+# In[12]:
 
 # TODO 实现 Gaussain Jordan 方法求解 Ax = b
 
@@ -231,7 +346,7 @@ def gj_Solve(A, b, decPts=4, epsilon = 1.0e-16):
     if shape(A)[0]==len(b):
 
 #       转为增广矩阵
-        augmentMatrix(A,b)
+        A = augmentMatrix(A,b)
 
 #       针对每列做操作
         for j in range(shape(A)[1]-1):
@@ -277,9 +392,9 @@ def gj_Solve(A, b, decPts=4, epsilon = 1.0e-16):
 # 
 # TODO 证明：
 # 
-# **因为I为单位矩阵,Z为全0矩阵,且A为方阵,由于Y的第一列全0代表矩阵A的对角线含有0,**
+# **奇异矩阵在线性代数的概念： 对应的行列式等于0的方阵。**
 # 
-# **所以此矩阵转换为上三角形矩阵的行列式的值为0：**
+# **在此例中，因为I为单位矩阵,Z为全0矩阵,且A为方阵,由于Y的第一列全0代表矩阵A的对角线含有0,**
 # 
 # $ A = \begin{bmatrix}
 #     1&0&0    & X&X&X \\
@@ -291,12 +406,14 @@ def gj_Solve(A, b, decPts=4, epsilon = 1.0e-16):
 # \end{bmatrix} 
 # $
 # 
+# **所以此矩阵转换为上三角形矩阵的行列式的值为0，即|A|=0,**
+# 
 # **当一个矩阵所在的行列式的值为0的话,该矩阵为奇异矩阵。**
 # **因此A为奇异矩阵。**
 
 # ## 2.5 测试 gj_Solve() 实现是否正确
 
-# In[10]:
+# In[13]:
 
 # TODO 构造 矩阵A，列向量b，其中 A 为奇异矩阵
 A=[[3,6],[0,0]]
@@ -473,7 +590,7 @@ print b
 # 
 # ### 求解方程 $X^TXh = X^TY $, 计算线性回归的最佳参数 h
 
-# In[11]:
+# In[14]:
 
 # TODO 实现线性回归
 '''
@@ -493,7 +610,7 @@ def linearRegression(points):
 
 # ## 3.3 测试你的线性回归实现
 
-# In[12]:
+# In[15]:
 
 # TODO 构造线性函数
 
@@ -503,7 +620,8 @@ import random
 P =  [ [ 0 for i in range(2) ] for j in range(100) ]
 for i in range(100):
     P[i][0]=random.randint(0, 100)
-    P[i][1]=random.gauss(2*P[i][0]+10,0.25)
+    P[i][1]=random.gauss(2*P[i][0]+10,1)
+#高斯噪音指的是服从标准正态分布的随机数，要求均值为0方差为1
     
 #TODO 对这100个点进行线性回归，将线性回归得到的函数和原线性函数比较
 print linearRegression(P)
@@ -513,7 +631,7 @@ print linearRegression(P)
 
 # 请确保你的实现通过了以下所有单元测试。
 
-# In[13]:
+# In[16]:
 
 import unittest
 import numpy as np
@@ -657,9 +775,4 @@ class LinearRegressionTestCase(unittest.TestCase):
 
 suite = unittest.TestLoader().loadTestsFromTestCase(LinearRegressionTestCase)
 unittest.TextTestRunner(verbosity=3).run(suite)
-
-
-# In[ ]:
-
-
 
